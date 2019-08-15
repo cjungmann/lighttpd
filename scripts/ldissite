@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+declare LDISSITE=1
+
+source lensite
