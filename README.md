@@ -25,10 +25,14 @@ will attempt to create LightTDP utilities that mimic corresponding Apache
 utilities.  The list is very small to start.  Perhaps it will grow as I
 gain experience with LightTPD.
 
+If either **lensite** and **ldissite** is called without a site name,
+the program will run interactively if running as root, or will show the
+status of sites-available sites if not root.
+
 Apache Utility | LightTPD Equivalent | Function
 -------------- | ------------------- | ---
-a2ensite       | l2ensite            | Enable site
-a2dissite      | l2dissite           | Disable site
+a2ensite       | lensite             | Enable site
+a2dissite      | ldissite            | Disable site
 
 
 
