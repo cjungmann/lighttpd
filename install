@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+is_root()            { [[ "$EUID" -eq 0 ]]; }
+is_uninstalling()    { [ "$UNINSTALLING" ]; }
+
+declare pwd="${PWD}"
+
+int_install()
+{
+    if [ -f "/usr/bin/lensite" ]; then
+        echo "Utilities already installed."
+    else
+        if is_root; then
+            cd /usr/bin/
+            cp -s ${pwd}/scripts/* .
+            cd "$pwd"
+        else
+            echo "Must be root to install."
+        fi
+    fi
+}
+
+# Only delete utilities in /usr/bin whose names
+# match AND are links to files in scripts.
+int_uninstall()
+{
+    cd scripts
+    local -a scripts=( $( ls -1 ) )
+    local name
+    local dirval
+
+    if is_root; then
+        cd /usr/bin
+        for name in "${scripts[@]}"; do
+            if [ -L "$name" ]; then
+                dirval=$( ls -l "$name" )
+                if [[ "$dirval" =~ "$pwd" ]]; then
+                    unlink $name
+                fi
+            fi
+        done
+        cd "$pwd"
+    else
+        echo "Must be root to install."
+    fi
+}
+
+
+if is_uninstalling; then
+    int_uninstall
+elif [ $# -eq 0 ]; then
+    int_install
+elif [ $1 == "uninstall" ]; then
+    int_uninstall
+fi
